@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description"
+		content="JovarkOS is an Arch-based GNU/Linux distribution offering stability, usability, and speed, in that order. Join us today!" />
+	<meta name="author" content="JovarkOS Development Team, Lucas Burlingham" />
+	<title>JovarkOS Home</title>
+	<!-- Favicon-->
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	<!-- FontAwesome 5.15.3 CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" defer />
+
+	<!-- (Optional) Use CSS or JS implementation -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+		integrity="sha512-RXf+QSDCUQs5uwRKaDoXt55jygZZm2V++WUZduaU/Ui/9EGp3f/2KZVahFZBKGH0s774sd3HmrhUy+SgOFQLVQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+	<!-- Bootstrap icons-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+	<!-- Core theme CSS (includes Bootstrap)-->
+	<link href="css/styles.css" rel="stylesheet" />
+	<link rel="canonical" href="https://jovarkos.org/index.html" />
+
+
+</head>
+
+<body class="d-flex flex-column h-100" id="body">
+	<main class="flex-shrink-0">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container px-5">
+				<a class="navbar-brand" href="index.html">JovarkOS <span class="text-muted">WebMaker</span></a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation"><span
+						class="navbar-toggler-icon"></span></button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a class="nav-link active" href="https://jovarkos.org/">Main Page</a></li>
+						<li class="nav-item"><a class="nav-link" href="https://github.com/jovarkos">
+								<img src="assets/badge.svg" alt="View on GitHub">
+							</a></li>
+						<!-- 
+						<li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+						<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+						<li class="nav-item"><a class="nav-link" href="download.html">Download</a></li>
+						<li class="nav-item"><a class="nav-link" href="https://docs.jovarkos.org/#/">Documentation</a> 
+					 </li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">Media</a>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+								<li><a class="dropdown-item" href="https://twitter.com/jovarkos">Twitter</a></li>
+								<li><a class="dropdown-item" href="screenshots.html">Screenshots</a></li>
+							</ul>
+						</li>
+					 -->
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- Header-->
+		<header class="bg-dark py-5">
+			<div class="container px-5">
+				<div class="row gx-5 align-items-center justify-content-center">
+					<div class="col-lg-8 col-xl-7 col-xxl-6">
+						<div class="my-5 text-center text-xl-start">
+							<h1 class="display-5 fw-bolder text-white mb-2">You've seen JovarkOS,
+							</h1>
+							<p class="lead fw-normal text-white-50 mb-4">But what about the process of making it? Take
+								<i>open source</i> to a new level and customize your own ISO built on Arch just like
+								JovarkOS
+								is!
+							</p>
+							<div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+								<a class="btn btn-primary btn-lg px-4 me-sm-3" href="start.php">Start JovarkOS
+									WebMaker</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- Call to action-->
+		<div class="container">
+			<div class="row mb-5 mt-2">
+				<h1 class="text-center mb-3">Just a start...</h1>
+				<div class="col">
+				</div>
+				<div class="col-10">
+					<form action="start.php" method="GET">
+						<div class="row mb-1">
+							<div class="col">
+								<label class="form-label">Project Name</label>
+								<input type="text" name="project_name" class="form-control" placeholder="MyCoolISO"
+									aria-label="MyCoolISO" required>
+							</div>
+							<div class="col">
+								<!-- hostname -b -->
+								<label class="form-label">Default Hostname</label>
+								<input type="text" name="default_hostname" class="form-control"
+									placeholder="jovarkos-maker">
+							</div>
+						</div>
+						<div class="row mb-1">
+							<div class="col">
+								<!-- mkuser -->
+								<label class="form-label">Non-root Username <span
+										class="text-muted">Optional</span></label>
+								<input type="text" name="username" class="form-control" placeholder="backup_user1"
+									aria-label="Username">
+							</div>
+							<div class="col">
+								<!-- https://superuser.com/questions/442096/change-default-dns-server-in-arch-linux -->
+								<label class="form-label">DNS Servers <span class="text-muted">(separate with
+										comma, Optional)</span></label>
+								<input type="text" name="dns_servers" class="form-control"
+									placeholder="1.1.1.1,8.8.8.8,pi.hole"
+									aria-label="DNS Servers (separate with comma, optional)">
+
+							</div>
+						</div>
+						<div class="row mb-1">
+							<div class="col">
+								<!-- chsh -->
+								<div class="form-group">
+									<label for="default_shell">Default shell <span
+											class="text-muted">Optional</span></label>
+									<select id="default_shell" class="form-control" name="default_shell">
+										<option value="bash" default>BASH (default)</option>
+										<option value="dash">DASH</option>
+										<option value="fish">FISH</option>
+										<option value="ksh">KSH</option>
+										<option value="tcsh">TCSH</option>
+										<option value="zsh">ZSH</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row mb-1">
+							<div class="col">
+								<!-- Add nessasary packages to packages.x86_64 and add configuration files-->
+								<div class="form-group">
+									<label for="default_de">Default Desktop Environment <span
+											class="text-muted">Optional</label>
+									<select id="default_de" class="form-control" name="default_de" required
+										aria-required="true">
+										<option value="cli" default>None</option>
+										<option value="gnome">GNOME</option>
+										<option value="kde">KDE</option>
+										<option value="cinnamon">Cinnamon</option>
+										<option value="openbox">Openbox</option>
+										<option value="i3">i3</option>
+										<option value="xfce">xfce</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row mb-1">
+							<div class="col">
+								<!-- Add packages to packages.x86_64 -->
+								<label class="form-label">List of packages to install <span class="text-muted">(separate
+										with
+										space, Optional)</span>
+								</label>
+								<textarea type="text" name="install_packages" class="form-control"
+									placeholder="git curl gnome-tweaks gcc cpp httpd"
+									aria-label="List of packages to install (separate with commas, Optional)"></textarea>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary mt-2">Next</button>
+					</form>
+				</div>
+				<div class="col"></div>
+			</div>
+		</div>
+		</section>
+	</main>
+	<!-- Footer-->
+	<footer class="bg-dark py-4 mt-auto">
+		<div class="container px-5">
+			<div class="row align-items-center justify-content-between flex-column flex-sm-row">
+				<div class="col-auto">
+					<div class="small m-0 text-white">Copyright &copy; JovarkOS Development Team 2022 <span
+							class="text-muted">Site Licensed under MIT</span> </div>
+				</div>
+				<div class="col-auto">
+					<a class="link-light small" href="#!">Privacy</a>
+					<span class="text-white mx-1">&middot;</span>
+					<a class="link-light small" href="#!">Terms</a>
+					<span class="text-white mx-1">&middot;</span>
+					<a class="link-light small" href="#!">Contact</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Bootstrap core JS-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+	<script data-goatcounter="https://jovarkos.goatcounter.com/count" src="js/scripts.js"></script>
+	<script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
+</body>
+
+</html>

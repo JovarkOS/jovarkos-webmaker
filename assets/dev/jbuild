@@ -1,0 +1,152 @@
+#!/bin/bash
+
+# set -x
+
+# Build variables
+WORKING="working"
+OUTPUT="output"
+SOURCE="archlive"
+LIVEROOT="airootfs"
+CONFIG="%{session_name}%config"
+
+function generic_error() {
+    echo "Incorrect syntax or options. Please use the 'help' flag for more information."
+}
+
+function error_no-archiso() {
+	if [ ! -d "$SOURCE" ]; then
+            echo "Please select profile to build upon: "
+            echo "    releng (Used in Official Monthly Builds)"
+            echo "    baseline (Minimal live configuration)"
+            read -p "Profile: " PROFILE
+	    cp -r /usr/share/archiso/configs/$PROFILE/ $SOURCE
+        echo "Copied profile $PROFILE to $SOURCE"
+        fi
+}
+
+function build_iso() {
+    error_no-archiso
+    echo "Clearing $WORKING directory before beginning..."
+    sudo rm -rf $WORKING
+    echo "Copying $CONFIG/archlive to $(pwd)..."
+    sudo cp $CONFIG/archlive . -r
+    sudo /usr/bin/mkarchiso -v -w $WORKING -o $OUTPUT $SOURCE
+    # retVal=$?
+    # if [ $retVal -ne 0 ]; then
+    #     echo "There has been an error. Exiting..."
+    # fi
+    # if [ $retVal -ne 1 ]; then
+    #     confirm_run
+    # fi
+    
+}
+
+# function confirm_run() {
+#     echo "Build complete. Would you like to run the ISO?"
+#     read -p "y/N: " RUN
+#     if [ "$RUN" == "y" ]; then
+#         echo "Running ISO..."
+#         # sudo /usr/bin/run_archiso -i $OUTPUT/jovarkos-$(date +%Y.%m.%d)-x86_64.iso
+        
+#         qemu-system-x86_64 \
+#         -boot order=d,menu=on,reboot-timeout=5000 \
+#         -m "size=3072,slots=0,maxmem=$((3072*1024*1024))" \
+#         -smp 2 \
+#         -k en-us \
+#         -name archiso,process=archiso_0 \
+#         -device virtio-scsi-pci,id=scsi0 \
+#         -display sdl \
+#         -vga virtio \
+#         -audiodev pa,id=snd0 \
+#         -device ich9-intel-hda \
+#         -device hda-output,audiodev=snd0 \
+#         -device virtio-net-pci,romfile=,netdev=net0 -netdev user,id=net0,hostfwd=tcp::60022-:22 \
+#         -machine type=q35,smm=on,accel=kvm,usb=on,pcspk-audiodev=snd0 \
+#         -global ICH9-LPC.disable_s3=1 \
+#         -enable-kvm \
+#         -serial stdio \
+#         -no-reboot \
+#         -cdrom $OUTPUT/jovarkos-$(date +%Y.%m.%d)-x86_64.iso
+#     else
+#         echo "Exiting..."
+#     fi
+# }
+
+# function run_iso() {
+#     # /usr/bin/run_archiso -i $OPTARG
+#     qemu-system-x86_64 \
+#         -boot order=d,menu=on,reboot-timeout=5000 \
+#         -m "size=3072,slots=0,maxmem=$((3072*1024*1024))" \
+#         -smp 2 \
+#         -k en-us \
+#         -name archiso,process=archiso_0 \
+#         -device virtio-scsi-pci,id=scsi0 \
+#         -display sdl \
+#         -vga virtio \
+#         -audiodev pa,id=snd0 \
+#         -device ich9-intel-hda \
+#         -device hda-output,audiodev=snd0 \
+#         -device virtio-net-pci,romfile=,netdev=net0 -netdev user,id=net0,hostfwd=tcp::60022-:22 \
+#         -machine type=q35,smm=on,accel=kvm,usb=on,pcspk-audiodev=snd0 \
+#         -global ICH9-LPC.disable_s3=1 \
+#         -enable-kvm \
+#         -serial stdio \
+#         -no-reboot \
+#         -cdrom $OPTARG
+# }
+
+function profile() {
+    cp -r "/usr/share/archiso/configs/$OPTARG/" $SOURCE
+    echo "Copied profile $OPTARG to $SOURCE"
+}
+
+function version() {
+    echo "JovarkOS ISO build script v2022.05.15.r1"
+}
+
+# function usage() {
+#     __usage="Usage: ./build_iso.sh [FLAGS] [OPTIONS]
+#     Options:
+#     -b, build                     Clean working directory and build fresh ISO image using defaults from the $SOURCE/profiledef.sh file
+#     -r, run <path to iso>         Run ISO image
+#     -p, profile <profile name>    Create new profile using the specified profile name
+#     -h, help                      Print this help message
+#     -v, version                   Get the version of this script
+    
+#     Options for '-p' and 'profile':
+#     Profile - see <https://wiki.archlinux.org/title/Archiso#Prepare_a_custom_profile>
+#     for more information
+#          - Use either 'releng' (Used in Official Monthly Builds) or 'baseline' (Minimal live configuration) as the profile name. 
+#          - Profiles live in the /usr/share/archiso/configs/ directory. "
+#     echo "$__usage"
+# }
+
+
+# while getopts "br:p:hv" opt
+# do
+#     case $opt in
+#         b)
+#             build_iso 
+#             ;;
+#         r)
+#             run_iso $OPTARG 
+#             ;;
+#         p)
+#             profile $OPTARG 
+#             ;;
+#         h)
+#             usage 
+#             ;;
+#         v)
+#             version 
+#             ;;
+#         \?)
+#             echo "Invalid option: $1" >&2
+#             exit 1 
+#             ;;
+#         *)
+#             echo "Option $opt requires an argument." >&2
+#             exit 1 
+#             ;;
+#     esac
+# done
