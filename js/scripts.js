@@ -279,13 +279,13 @@ function getEmail() {
 
         // Add one line to the sheet
         fetch("https://sheet.best/api/sheets/f02e1734-3fa0-4dc1-84ab-72a0e6f99f03", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data),
-        })
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data),
+            })
             .then((r) => r.json())
             .then((data) => {
                 // The response comes here

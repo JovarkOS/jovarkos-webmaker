@@ -7,7 +7,7 @@
 	<meta name="description"
 		content="JovarkOS is an Arch-based GNU/Linux distribution offering stability, usability, and speed, in that order. Join us today!" />
 	<meta name="author" content="JovarkOS Development Team, Lucas Burlingham" />
-	<title>JovarkOS Home</title>
+	<title>JovarkOS WebMaker</title>
 	<!-- Favicon-->
 	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
 	<!-- FontAwesome 5.15.3 CSS -->
@@ -25,7 +25,43 @@
 	<link href="css/styles.css" rel="stylesheet" />
 	<link rel="canonical" href="https://jovarkos.org/index.html" />
 
+	<script>
+		function startDebug() {
+			var submitButton = document.getElementById("submit");
 
+
+			submitButton.addEventListener("onclick", function (e) {
+				e.preventDefault();
+
+				var form = document.getElementById("form");
+				var hiddenDebug = document.createElement("input");
+
+				// <input type="hidden" name="DEBUG" value="true">
+				hiddenDebug.setAttribute("type", "hidden");
+				hiddenDebug.setAttribute("name", "DEBUG");
+				hiddenDebug.setAttribute("value", "true");
+				hiddenDebug.setAttribute("id", "debug_toggle")
+
+				form.appendChild(hiddenDebug);
+
+				document.forms["form"].submit();
+			});
+
+			console.info("Using debug settings...");
+		}
+
+		function cancelDebug() {
+			var submitButton = document.getElementById("submit");
+			var hiddenDebug = document.getElementById("debug_toggle");
+
+			// Delete hidden input 
+			document.remove(hiddenDebug);
+
+
+			submitButton.removeEventListener("onclick");
+			console.info("Not using debug settings anymore...");
+		}
+	</script>
 </head>
 
 <body class="d-flex flex-column h-100" id="body">
@@ -91,12 +127,12 @@
 				<div class="col">
 				</div>
 				<div class="col-10">
-					<form action="start.php" method="GET">
+					<form action="start.php" method="GET" id="form">
 						<div class="row mb-1">
 							<div class="col">
 								<label class="form-label">Project Name</label>
-								<input type="text" name="project_name" class="form-control" placeholder="MyCoolISO"
-									aria-label="MyCoolISO" required>
+								<input type="text" name="project_name" class="form-control" placeholder="jovarkos-iso"
+									aria-label="jovarkos-iso" required>
 							</div>
 							<div class="col">
 								<!-- hostname -b -->
@@ -171,7 +207,7 @@
 									aria-label="List of packages to install (separate with commas, Optional)"></textarea>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-primary mt-2">Next</button>
+						<button type="submit" class="btn btn-primary mt-2" id="submit">Next</button>
 					</form>
 				</div>
 				<div class="col"></div>
@@ -202,6 +238,8 @@
 	<!-- Core theme JS-->
 	<script data-goatcounter="https://jovarkos.goatcounter.com/count" src="js/scripts.js"></script>
 	<script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>
+
+
 </body>
 
 </html>

@@ -4,7 +4,10 @@
 
 $name = time() . substr($_SERVER['REMOTE_ADDR'], -4);
 
-session_name($name);
+
+
+
+session_ID($name);
 session_start();
 
 
@@ -94,6 +97,5 @@ if($_GET['install_packages']) {
 function errorMissing($missingVariable) {
 	// Stop page from loading and show errors
 	echo "\"" . $missingVariable . "\" has not been received by the server.";
-	stop();
+	exit();
 }
-
