@@ -1,6 +1,5 @@
 <?php
 
-
 $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 $id = 'session' . substr(str_shuffle($chars), 0, 16) .  time();
 
@@ -10,18 +9,17 @@ session_start();
 
 $dir = session_id();
 		
-// Make folder if not already made
 if(is_dir($dir) === false) {
 	mkdir($dir);
 }
 
 
 $settings_file = $dir . '/settings_file_' . $dir;
-file_put_contents($settings_file,'|', FILE_APPEND|LOCK_EX);
+file_put_contents($settings_file,'|',FILE_APPEND|LOCK_EX);
 
 
 // write time to settings file
-file_put_contents($settings_file, time() . '|', FILE_APPEND|LOCK_EX);
+file_put_contents($settings_file,time() . '|',FILE_APPEND|LOCK_EX);
 
 
 // Required variables
@@ -29,8 +27,7 @@ if($_POST['project_name']) {
 	$_SESSION['project_name'] = $_POST['project_name'];
 	htmlspecialchars($project_name, ENT_QUOTES, 'UTF-8');
 	$project_name = $_POST['project_name'];
-	// write $project_name to project_settings_$dir 
-	file_put_contents($settings_file, $project_name . '|', FILE_APPEND|LOCK_EX);
+	file_put_contents($settings_file,$project_name . '|',FILE_APPEND|LOCK_EX);
 } else {
 	errorMissing("Project Name");
 }
@@ -39,8 +36,7 @@ if($_POST['default_shell']) {
 	$_SESSION['default_shell'] = $_POST['default_shell'];
 	htmlspecialchars($default_de, ENT_QUOTES, 'UTF-8');
 	$default_de = $_POST['default_de'];
-	// write to project_settings_$dir 
-	file_put_contents($settings_file, $default_de . '|', FILE_APPEND|LOCK_EX);
+	file_put_contents($settings_file,$default_de . '|',FILE_APPEND|LOCK_EX);
 } else {
 	errorMissing("Default Desktop Environment");
 }
@@ -51,11 +47,10 @@ if($_POST['default_hostname']) {
 	$_SESSION['default_hostname'] = $_POST['default_hostname'];
 	htmlspecialchars($default_hostname, ENT_QUOTES, 'UTF-8');
 	$default_hostname = $_POST['default_hostname'];
-	// write to project_settings_$dir
-	file_put_contents($settings_file, $default_hostname . '|', FILE_APPEND|LOCK_EX);
+	file_put_contents($settings_file,$default_hostname . '|',FILE_APPEND|LOCK_EX);
 } else {
 	$default_hostname = "jovarkos-maker";
-	file_put_contents($settings_file, $default_hostname . '|', FILE_APPEND|LOCK_EX);
+	file_put_contents($settings_file,$default_hostname . '|',FILE_APPEND|LOCK_EX);
 }
 
 
@@ -64,24 +59,21 @@ if($_POST['username']) {
 	$_SESSION['username'] = $_POST['username'];
 	htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
 	$username = $_POST['username'];
-	// write to project_settings_$dir
-	file_put_contents($settings_file, $username . '|', FILE_APPEND|LOCK_EX);
+	file_put_contents($settings_file,$username . '|',FILE_APPEND|LOCK_EX);
 }
 
 if($_POST['dns_servers']) {
 	$_SESSION['dns_servers'] = $_POST['dns_servers'];
 	htmlspecialchars($htmlspecialchars, ENT_QUOTES, 'UTF-8');
 	$dns_servers = $_POST['dns_servers'];
-	// write to project_settings_$dir	
-	file_put_contents($settings_file, $dns_servers . '|', FILE_APPEND|LOCK_EX);
+	file_put_contents($settings_file,$dns_servers . '|',FILE_APPEND|LOCK_EX);
 }
 
 if($_POST['default_shell']) {
 	$_SESSION['default_shell'] = $_POST['default_shell'];
 	htmlspecialchars($default_shell, ENT_QUOTES, 'UTF-8');
 	$default_shell = $_POST['default_shell'];
-	// write to project_settings_$dir
-	file_put_contents($settings_file, $default_shell . '|', FILE_APPEND|LOCK_EX);
+	file_put_contents($settings_file,$default_shell . '|',FILE_APPEND|LOCK_EX);
 }
 
 if($_POST['install_packages']) {
@@ -97,24 +89,20 @@ if($_POST['install_packages']) {
 	// Convert newlines into spaces for explosion
 	str_replace("\n"," ",$install_packages);
 	
-	// Make into array using the space delimiters
-	explode($install_packages," ");
-
+	
 	$_SESSION['install_packages'] = $install_packages;
 
+	file_put_contents($settings_file,$install_packages . '|',FILE_APPEND|LOCK_EX);
 	
-	// write to project_settings_$dir
-	file_put_contents($settings_file, $install_packages . '|', FILE_APPEND|LOCK_EX);
-
+	// Make into array using the space delimiters so that we can loop through it
+	$install_packages_array = explode(" ",$install_packages);
 	
-	foreach ($install_packages as $package) {
 
-		$package_file_path = $dir . "/packages.x86_64";
-		// Add newline character 
-		$package += "\n";
-		// Append data to file and prevent others from writing to file at the same time
-		file_put_contents($package_file_path, $package, FILE_APPEND | LOCK_EX);
+	foreach($install_packages_array as $package) {
 
+		$package_file_path = $dir . '/packages.x86_64';
+		
+		file_put_contents($package_file_path,$package,FILE_APPEND|LOCK_EX);
 	}
 }
 
@@ -178,22 +166,8 @@ function errorMissing($missingVariable) {
 						<li class="nav-item"><a class="nav-link active" href="https://jovarkos.org/">Main Page</a></li>
 						<li class="nav-item"><a class="nav-link" href="https://github.com/jovarkos">
 								<img src="assets/badge.svg" alt="View on GitHub">
-							</a></li>
-						<!-- 
-						<li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-						<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-						<li class="nav-item"><a class="nav-link" href="download.html">Download</a></li>
-						<li class="nav-item"><a class="nav-link" href="https://docs.jovarkos.org/#/">Documentation</a> 
-					 </li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
-								data-bs-toggle="dropdown" aria-expanded="false">Media</a>
-							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-								<li><a class="dropdown-item" href="https://twitter.com/jovarkos">Twitter</a></li>
-								<li><a class="dropdown-item" href="screenshots.html">Screenshots</a></li>
-							</ul>
+							</a>
 						</li>
-					 -->
 					</ul>
 				</div>
 			</div>
@@ -261,8 +235,6 @@ function errorMissing($missingVariable) {
 	</footer>
 	<!-- Bootstrap core JS-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
 
 </body>
 
