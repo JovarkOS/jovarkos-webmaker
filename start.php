@@ -97,10 +97,12 @@ if($_POST['install_packages']) {
 	// Make into array using the space delimiters so that we can loop through it
 	$install_packages_array = explode(" ",$install_packages);
 	
+	$package_file_path = $dir . "/packages.x86_64";
 
 	foreach($install_packages_array as $package) {
 
-		$package_file_path = $dir . '/packages.x86_64';
+		// Add /n to the end of each package so that it is on a new line
+		$package = $package . "\n";
 		
 		file_put_contents($package_file_path,$package,FILE_APPEND|LOCK_EX);
 	}
