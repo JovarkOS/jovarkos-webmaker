@@ -2,7 +2,7 @@
 
 
 $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-$id = substr(str_shuffle($chars), 0, 16) .  time();
+$id = 'session' . substr(str_shuffle($chars), 0, 16) .  time();
 
 session_ID($id);
 session_start();
