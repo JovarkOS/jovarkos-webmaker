@@ -61,6 +61,12 @@
 			submitButton.removeEventListener("onclick");
 			console.info("Not using debug settings anymore...");
 		}
+
+		// Enable tooltips (https://getbootstrap.com/docs/5.0/components/tooltips/#example-enable-tooltips-everywhere)
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+			return new bootstrap.Tooltip(tooltipTriggerEl)
+		})
 	</script>
 </head>
 
@@ -130,41 +136,47 @@
 					<form action="start.php" method="POST" id="form">
 						<div class="row mb-1">
 							<div class="col">
-								<label class="form-label">Project Name</label>
+								<label class="form-label fw-bold">Project Name</label>
 								<input type="text" name="project_name" class="form-control" placeholder="jovarkos-iso"
 									aria-label="jovarkos-iso" required>
 							</div>
 							<div class="col">
-								<!-- hostname -b -->
-								<label class="form-label">Default Hostname</label>
-								<input type="text" name="default_hostname" class="form-control"
-									placeholder="jovarkos-maker">
+								<label class="form-label fw-bold">ISO
+									filename <span class="text-muted fw-normal">(No spaces)</span></label>
+								<input type="text" name="iso_name" class="form-control" placeholder="jovarkos-maker"
+									required>
 							</div>
+						</div>
+						<div class="row mb-1s">
+							<!-- https://superuser.com/questions/442096/change-default-dns-server-in-arch-linux -->
+							<label class="form-label fw-bold">DNS Servers <span class="text-muted fw-normal">(separate
+									with
+									comma, Optional)</span></label>
+							<input type="text" name="dns_servers" class="form-control"
+								placeholder="1.1.1.1,8.8.8.8,pi.hole"
+								aria-label="DNS Servers (separate with comma, optional)">
 						</div>
 						<div class="row mb-1">
 							<div class="col">
-								<!-- mkuser -->
-								<label class="form-label">Non-root Username <span
-										class="text-muted">Optional</span></label>
+								<label class="form-label fw-bold">Non-root Username <span
+										class="text-muted fw-normal">Optional</span></label>
 								<input type="text" name="username" class="form-control" placeholder="backup_user1"
 									aria-label="Username">
 							</div>
 							<div class="col">
-								<!-- https://superuser.com/questions/442096/change-default-dns-server-in-arch-linux -->
-								<label class="form-label">DNS Servers <span class="text-muted">(separate with
-										comma, Optional)</span></label>
-								<input type="text" name="dns_servers" class="form-control"
-									placeholder="1.1.1.1,8.8.8.8,pi.hole"
-									aria-label="DNS Servers (separate with comma, optional)">
-
+								<div class="col">
+									<label class="form-label fw-bold">Default Hostname</label>
+									<input type="text" name="default_hostname" class="form-control"
+										placeholder="jovarkos-maker">
+								</div>
 							</div>
 						</div>
 						<div class="row mb-1">
 							<div class="col">
 								<!-- chsh -->
 								<div class="form-group">
-									<label for="default_shell">Default shell <span
-											class="text-muted">Optional</span></label>
+									<label for="default_shell" class="form-label fw-bold">Default shell <span
+											class="text-muted fw-normal">Optional</span></label>
 									<select id="default_shell" class="form-control" name="default_shell">
 										<option value="bash" default>BASH (default)</option>
 										<option value="dash">DASH</option>
@@ -181,9 +193,9 @@
 								<!-- Add nessasary packages to packages.x86_64 and add configuration files-->
 								<div class="form-group">
 									<label for="default_de">Default Desktop Environment <span
-											class="text-muted">Optional</label>
-									<select id="default_de" class="form-control" name="default_de" required
-										aria-required="true">
+											class="text-muted fw-normal">Optional</label>
+									<select id="default_de" class="form-control" name="default_de" aria-required="true"
+										required>
 										<option value="cli" default>None</option>
 										<option value="gnome">GNOME</option>
 										<option value="kde">KDE</option>
@@ -198,7 +210,8 @@
 						<div class="row mb-1">
 							<div class="col">
 								<!-- Add packages to packages.x86_64 -->
-								<label class="form-label">List of packages to install <span class="text-muted">(separate
+								<label class="form-label fw-bold">List of packages to install <span
+										class="text-muted fw-normal">(separate
 										with
 										space, Optional)</span>
 								</label>

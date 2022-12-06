@@ -6,6 +6,9 @@ $id = 'session' . substr(str_shuffle($chars), 0, 16) .  time();
 session_ID($id);
 session_start();
 
+$_SESSION['id'] = $id;
+
+
 
 $dir = session_id();
 		
@@ -28,8 +31,15 @@ if($_POST['project_name']) {
 	htmlspecialchars($project_name, ENT_QUOTES, 'UTF-8');
 	$project_name = $_POST['project_name'];
 	file_put_contents($settings_file,$project_name . '|',FILE_APPEND|LOCK_EX);
-} else {
-	errorMissing("Project Name");
+}
+
+if($_POST['iso_name']) {
+	$_SESSION['iso_name'] = $_POST['iso_name'];
+	htmlspecialchars($project_name, ENT_QUOTES, 'UTF-8');
+	$iso_name = $_POST['iso_name'];
+	// Don't allow spaces in iso name
+	$iso_name = str_replace(' ', '_', $iso_name);
+	file_put_contents($settings_file,$iso_name . '|',FILE_APPEND|LOCK_EX);
 }
 
 if($_POST['default_shell']) {
@@ -37,8 +47,6 @@ if($_POST['default_shell']) {
 	htmlspecialchars($default_de, ENT_QUOTES, 'UTF-8');
 	$default_de = $_POST['default_de'];
 	file_put_contents($settings_file,$default_de . '|',FILE_APPEND|LOCK_EX);
-} else {
-	errorMissing("Default Desktop Environment");
 }
 
 
@@ -184,6 +192,7 @@ function errorMissing($missingVariable) {
 						<thead>
 							<tr>
 								<th scope="col">Project Name</th>
+								<th scope="col">ISO name</th>
 								<th scope="col">Default Hostname</th>
 								<th scope="col">Non-root Username</th>
 								<th scope="col">DNS Servers</th>
@@ -195,6 +204,7 @@ function errorMissing($missingVariable) {
 						<tbody>
 							<tr>
 								<td><?php echo $project_name; ?></td>
+								<td><?php echo $iso_name; ?></td>
 								<td><?php echo $default_hostname; ?></td>
 								<td><?php echo $username; ?></td>
 								<td><?php echo $dns_servers; ?></td>
@@ -210,7 +220,18 @@ function errorMissing($missingVariable) {
 			<div class="row">
 				<div class="col">
 					<form action="createISO.php" method="POST">
-
+						<!-- show settings confirmation checkbox here -->
+						<div class="form-check col-6 mx-auto mb-2">
+							<label class="form-check-label" for="settings_confirm">
+								I confirm that the settings are correct.
+							</label>
+							<input class="form-check-input" type="checkbox" value="true" name="settings_confirm"
+								id="settings_confirm" required>
+						</div>
+						<!-- submit button -->
+						<div class="d-grid gap-2 col-6 mx-auto">
+							<button class="btn btn-primary" type="submit">Create ISO</button>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -236,7 +257,10 @@ function errorMissing($missingVariable) {
 		</div>
 	</footer>
 	<!-- Bootstrap core JS-->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+	</script>
+
 
 </body>
 
