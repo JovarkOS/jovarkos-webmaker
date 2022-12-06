@@ -1,7 +1,5 @@
 <?php
 
-// $name = time() . $_SERVER['REMOTE_ADDR'];
-
 
 $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 $id = substr(str_shuffle($chars), 0, 16) .  time();
@@ -134,3 +132,138 @@ function errorMissing($missingVariable) {
 	header("Location: " . $_SERVER['HTTP_REFERER']);
 
 }
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description"
+		content="JovarkOS is an Arch-based GNU/Linux distribution offering stability, usability, and speed, in that order. Join us today!" />
+	<meta name="author" content="JovarkOS Development Team, Lucas Burlingham" />
+	<title>Review Settings | JovarkOS WebMaker</title>
+	<!-- Favicon-->
+	<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+	<!-- FontAwesome 5.15.3 CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" defer />
+
+	<!-- (Optional) Use CSS or JS implementation -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
+		integrity="sha512-RXf+QSDCUQs5uwRKaDoXt55jygZZm2V++WUZduaU/Ui/9EGp3f/2KZVahFZBKGH0s774sd3HmrhUy+SgOFQLVQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+	<!-- Bootstrap icons-->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+	<!-- Core theme CSS (includes Bootstrap)-->
+	<link href="css/styles.css" rel="stylesheet" />
+	<!-- <link rel="canonical" href="https://jovarkos.org/index.html" /> -->
+
+</head>
+
+<body class="d-flex flex-column h-100" id="body">
+	<main class="flex-shrink-0">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container px-5">
+				<a class="navbar-brand" href="index.html">JovarkOS <span class="text-muted">WebMaker</span></a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation"><span
+						class="navbar-toggler-icon"></span></button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a class="nav-link active" href="https://jovarkos.org/">Main Page</a></li>
+						<li class="nav-item"><a class="nav-link" href="https://github.com/jovarkos">
+								<img src="assets/badge.svg" alt="View on GitHub">
+							</a></li>
+						<!-- 
+						<li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+						<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+						<li class="nav-item"><a class="nav-link" href="download.html">Download</a></li>
+						<li class="nav-item"><a class="nav-link" href="https://docs.jovarkos.org/#/">Documentation</a> 
+					 </li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">Media</a>
+							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+								<li><a class="dropdown-item" href="https://twitter.com/jovarkos">Twitter</a></li>
+								<li><a class="dropdown-item" href="screenshots.html">Screenshots</a></li>
+							</ul>
+						</li>
+					 -->
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- Call to action-->
+		<div class="container">
+			<div class="row mb-5 mt-2">
+				<h1 class="text-center mb-3">Lets review...</h1>
+				<div class="col-1"></div>
+				<div class="col-10">
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th scope="col">Project Name</th>
+								<th scope="col">Default Hostname</th>
+								<th scope="col">Non-root Username</th>
+								<th scope="col">DNS Servers</th>
+								<th scope="col">Default Shell</th>
+								<th scope="col">Default Desktop Environment</th>
+								<th scope="col">Packages to install</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><?php echo $project_name; ?></td>
+								<td><?php echo $default_hostname; ?></td>
+								<td><?php echo $username; ?></td>
+								<td><?php echo $dns_servers; ?></td>
+								<td><?php echo $default_shell; ?></td>
+								<td><?php echo $default_de; ?></td>
+								<td><?php echo $install_packages; ?></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-1"></div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<form action="createISO.php" method="POST">
+
+					</form>
+				</div>
+			</div>
+		</div>
+		</section>
+	</main>
+	<!-- Footer-->
+	<footer class="bg-dark py-4 mt-auto">
+		<div class="container px-5">
+			<div class="row align-items-center justify-content-between flex-column flex-sm-row">
+				<div class="col-auto">
+					<div class="small m-0 text-white">Copyright &copy; JovarkOS Development Team 2022 <span
+							class="text-muted">Site Licensed under MIT</span> </div>
+				</div>
+				<div class="col-auto">
+					<a class="link-light small" href="#!">Privacy</a>
+					<span class="text-white mx-1">&middot;</span>
+					<a class="link-light small" href="#!">Terms</a>
+					<span class="text-white mx-1">&middot;</span>
+					<a class="link-light small" href="#!">Contact</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Bootstrap core JS-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</body>
+
+</html>
