@@ -3,23 +3,24 @@
 $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 $id = 'session' . substr(str_shuffle($chars), 0, 16) .  time();
 
+// Destroy any previous sessions
+session_destroy();
+
+// Name and start new session
 session_ID($id);
 session_start();
 
+
 $_SESSION['id'] = $id;
 
-
-
 $dir = session_id();
-		
+
 if(is_dir($dir) === false) {
 	mkdir($dir);
 }
 
-
 $settings_file = $dir . '/settings_file_' . $dir;
 file_put_contents($settings_file,'|',FILE_APPEND|LOCK_EX);
-
 
 // write time to settings file
 file_put_contents($settings_file,time() . '|',FILE_APPEND|LOCK_EX);
@@ -27,61 +28,60 @@ file_put_contents($settings_file,time() . '|',FILE_APPEND|LOCK_EX);
 
 // Required variables
 if($_POST['project_name']) {
-	$_SESSION['project_name'] = $_POST['project_name'];
 	htmlspecialchars($project_name, ENT_QUOTES, 'UTF-8');
 	$project_name = $_POST['project_name'];
 	file_put_contents($settings_file,$project_name . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['project_name'] = $project_name;
 }
 
 if($_POST['iso_name']) {
-	$_SESSION['iso_name'] = $_POST['iso_name'];
 	htmlspecialchars($project_name, ENT_QUOTES, 'UTF-8');
 	$iso_name = $_POST['iso_name'];
 	// Don't allow spaces in iso name
 	$iso_name = str_replace(' ', '_', $iso_name);
 	file_put_contents($settings_file,$iso_name . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['iso_name'] = $iso_name;
 }
 
 if($_POST['default_shell']) {
-	$_SESSION['default_shell'] = $_POST['default_shell'];
 	htmlspecialchars($default_de, ENT_QUOTES, 'UTF-8');
 	$default_de = $_POST['default_de'];
 	file_put_contents($settings_file,$default_de . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['default_shell'] = $default_de;
 }
-
 
 // Not required variables but will be customized regardless
 if($_POST['default_hostname']) {
-	$_SESSION['default_hostname'] = $_POST['default_hostname'];
 	htmlspecialchars($default_hostname, ENT_QUOTES, 'UTF-8');
 	$default_hostname = $_POST['default_hostname'];
 	file_put_contents($settings_file,$default_hostname . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['default_hostname'] = $default_hostname;
 } else {
 	$default_hostname = "jovarkos-maker";
 	file_put_contents($settings_file,$default_hostname . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['default_hostname'] = $default_hostname;
 }
-
 
 // Optional variables
 if($_POST['username']) {
-	$_SESSION['username'] = $_POST['username'];
 	htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
 	$username = $_POST['username'];
 	file_put_contents($settings_file,$username . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['username'] = $username;
 }
 
 if($_POST['dns_servers']) {
-	$_SESSION['dns_servers'] = $_POST['dns_servers'];
 	htmlspecialchars($htmlspecialchars, ENT_QUOTES, 'UTF-8');
 	$dns_servers = $_POST['dns_servers'];
 	file_put_contents($settings_file,$dns_servers . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['dns_servers'] = $dns_servers;
 }
 
 if($_POST['default_shell']) {
-	$_SESSION['default_shell'] = $_POST['default_shell'];
 	htmlspecialchars($default_shell, ENT_QUOTES, 'UTF-8');
 	$default_shell = $_POST['default_shell'];
 	file_put_contents($settings_file,$default_shell . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['default_shell'] = $default_shell;
 }
 
 if($_POST['install_packages']) {
@@ -114,6 +114,13 @@ if($_POST['install_packages']) {
 		
 		file_put_contents($package_file_path,$package,FILE_APPEND|LOCK_EX);
 	}
+}
+
+if($_POST['motd']) {
+	htmlspecialchars($motd, ENT_QUOTES, 'UTF-8');
+	$motd = $_POST['motd'];
+	file_put_contents($settings_file,$motd . '|',FILE_APPEND|LOCK_EX);
+	$_SESSION['motd'] = $motd;
 }
 
 // Helper functions for variables 
@@ -188,7 +195,7 @@ function errorMissing($missingVariable) {
 				<h1 class="text-center mb-3">Lets review...</h1>
 				<div class="col-1"></div>
 				<div class="col-10">
-					<table class="table table-striped table-hover">
+					<table class="table table-striped table-hover" style="width:100%">
 						<thead>
 							<tr>
 								<th scope="col">Project Name</th>
@@ -198,7 +205,6 @@ function errorMissing($missingVariable) {
 								<th scope="col">DNS Servers</th>
 								<th scope="col">Default Shell</th>
 								<th scope="col">Default Desktop Environment</th>
-								<th scope="col">Packages to install</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -210,10 +216,24 @@ function errorMissing($missingVariable) {
 								<td><?php echo $dns_servers; ?></td>
 								<td><?php echo $default_shell; ?></td>
 								<td><?php echo $default_de; ?></td>
-								<td><?php echo $install_packages; ?></td>
 							</tr>
 						</tbody>
 					</table>
+
+					<div class="mb-3">
+						<h5>Packages to install:</h5>
+						<code>
+							<?php echo $install_packages; ?>
+						</code>
+					</div>
+					<div class="mb-3">
+						<h5>Message of the Day</h5>
+						<code>
+							<?php echo $motd; ?>
+						</code>
+					</div>
+
+
 				</div>
 				<div class="col-1"></div>
 			</div>
@@ -235,6 +255,39 @@ function errorMissing($missingVariable) {
 					</form>
 				</div>
 			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-1">
+					<a href="index.html" class="btn btn-primary">Go Back</a>
+				</div>
+				<div class="col-4"></div>
+				<div class="col-2">
+					<script>
+					// https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
+					function copySessionID() {
+						// Get the text field
+						var copyText = document.getElementById("session_id");
+
+						// Select the text field
+						copyText.select();
+						copyText.setSelectionRange(0, 99999); // For mobile devices
+
+						// Copy the text inside the text field
+						navigator.clipboard.writeText(copyText.value);
+						document.execCommand("copy");
+
+						// Alert the copied text
+						alert("Copied the text: " + copyText.value);
+
+					}
+					</script>
+					<!-- hidden input for session id -->
+					<input type="text" value="<?php echo session_id(); ?>" id="session_id">
+					<button class="btn btn-info" onclick="copySessionID()">Copy Session ID</button>
+				</div>
+			</div>
+		</div>
 		</div>
 		</section>
 	</main>
@@ -260,6 +313,8 @@ function errorMissing($missingVariable) {
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
 	</script>
+
+
 
 
 </body>

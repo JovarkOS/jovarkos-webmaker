@@ -8,7 +8,7 @@ $id = $_SESSION['id'];
 
 // copy releng files to id directory
 $src = "/usr/share/archiso/configs/releng/";
-$dest = "./$id/archlive";
+$dest = __DIR__ . "$id/archlive";
 
 // Don't copy if directory already exists (i.e if user refreshes at the wrong time)
 if(is_dir($dest) === false) {
@@ -16,19 +16,19 @@ if(is_dir($dest) === false) {
 }
 
 // Append $id/packages.x86_64 to $id/archlive/packages.x86_64 (i.e. add user's packages)
-$packages = file_get_contents("./$id/packages.x86_64");
+$packages = file_get_contents( __DIR__ . "$id/packages.x86_64");
 file_put_contents("$dest/packages.x86_64", $packages, FILE_APPEND);
 
 
-// Delete $id/packages.x86_64
-unlink("./$id/packages.x86_64");
+// Delete $id/packages.x86_64 as it is unneeded now
+unlink( __DIR__ . "$id/packages.x86_64");
 
 
 createProfiledef();
-modifyGrubFiles();
-modifySyslinuxFiles();
-modifyEfibootLoaderEntriesFiles();
 modifyDefaultHostname();
+changeOSName();
+changeBootLabel();
+changeMOTD();
 
 function createProfiledef() {
 	$contents = <<<TEXT
@@ -59,87 +59,77 @@ function createProfiledef() {
 	)
 	TEXT;
 
-	file_put_contents("./" . $_SESSION['id'] . "/archlive/profiledef.sh", $contents);
-	unset($contents);
-}
-
-function modifySyslinuxFiles() {
-	// foreach file in syslinux directory
-	$dir = "./" . $_SESSION['id'] . "/archlive/syslinux";
-	$files = scandir($dir);
-	
-	foreach($files as $file) {
-		if($file == "." || $file == "..") {
-			continue;
-		}
-		$contents = file_get_contents("$dir/$file");
-		$contents = str_replace("Arch Linux", $_SESSION['project_name'], $contents, LOCK_EX);
-		file_put_contents("$dir/$file", $contents);
-	}
-
 	file_put_contents("./" . $_SESSION['id'] . "/archlive/profiledef.sh", $contents, LOCK_EX);
-	unset($contents);
-	unset($dir);
-	unset($files);
 }
 
-function modifyGrubFiles() {
-	// Replace Arch Linux with project name
-	$dir = "./" . $_SESSION['id'] . "/archlive/grub";
-	$files = scandir($dir);
+function changeOSName() {
+	$dir = __DIR__ . "/" . $_SESSION['id'] . "/archlive/";
+	$files = listAllFiles($dir);
 	
 	foreach($files as $file) {
 		if($file == "." || $file == "..") {
 			continue;
 		}
-		$contents = file_get_contents("$dir/$file");
-		$contents = str_replace("Arch Linux", $_SESSION['project_name'], $contents, LOCK_EX);
-		file_put_contents("$dir/$file", $contents);
+		$contents = file_get_contents("$file");
+		$contents = str_replace("Arch Linux", $_SESSION['project_name'], $contents);
+		file_put_contents("$file", $contents);
 	}
-	
-	unset($contents);
-	unset($dir);
-	unset($files);
-
-	// Replace archlinux with iso name
-	$dir = "./" . $_SESSION['id'] . "/archlive/grub";
-	$files = scandir($dir);
-	
-	foreach($files as $file) {
-		if($file == "." || $file == "..") {
-			continue;
-		}
-		$contents = file_get_contents("$dir/$file");
-		$contents = str_replace("archlinux", $_SESSION['iso_name'], $contents, LOCK_EX);
-		file_put_contents("$dir/$file", $contents);
-	}
-
 }
 
-function modifyEfibootLoaderEntriesFiles() {
-	// Replace Arch Linux with project name
-	$dir = "./" . $_SESSION['id'] . "/archlive/efiboot/loader/entries";
-	$files = scandir($dir);
+function changeBootLabel() {
+	$dir = __DIR__ . "/" . $_SESSION['id'] . "/archlive/";
+	$files = listAllFiles($dir);
 	
 	foreach($files as $file) {
 		if($file == "." || $file == "..") {
 			continue;
 		}
-		$contents = file_get_contents("$dir/$file");
-		$contents = str_replace("Arch Linux", $_SESSION['project_name'], $contents, LOCK_EX);
-		file_put_contents("$dir/$file", $contents);
+		$contents = file_get_contents("$file");
+		$contents = str_replace("archlinux", $_SESSION['iso_name'], $contents);
+		// Don't replace URL's
+		$contents = str_replace("jovark_os.org", "archlinux.org", $contents);
+		file_put_contents("$file", $contents);
 	}
-	
-	unset($contents);
-	unset($dir);
-	unset($files);
-
 }
 
 function modifyDefaultHostname() {
 	// Replace hostname at $id/archlive/airootfs/etc/hostname with $_SESSION['default_hostname']
-	$contents = $_SESSION['default_hostname'];
-	file_put_contents("./" . $_SESSION['id'] . "/archlive/airootfs/etc/hostname", $contents, LOCK_EX);
+	$contents = $_SESSION['default_hostname'] . "\n";
+	unlink("./" . $_SESSION['id'] . "/archlive/airootfs/etc/hostname");
+	$file = "./" . $_SESSION['id'] . "/archlive/airootfs/etc/hostname";
+	file_put_contents($file, $contents, LOCK_EX);
+}
 
-	unset($contents);
+// From https://stackoverflow.com/questions/7765067/php-sed-like-functionality
+function listAllFiles($dir) {
+  $array = array_diff(scandir($dir), array('.', '..'));
+ 
+  foreach ($array as &$item) {
+    $item = $dir . $item;
+  }
+  unset($item);
+  foreach ($array as $item) {
+    if (is_dir($item)) {
+     $array = array_merge($array, listAllFiles($item . DIRECTORY_SEPARATOR));
+    }
+  }
+  return $array;
+}
+
+// function modifyDnsServers() {
+// 	// Replace DNS servers at $id/archlive/airootfs/etc/resolv.conf with $_SESSION['dns_servers']
+	
+// 	foreach ($_SESSION['dns_servers'] as $server) {
+// 		$contents = "nameserver " . $server . "\n";
+// 		unlink("./" . $_SESSION['id'] . "/archlive/airootfs/etc/resolv.conf");
+// 		$file = "./" . $_SESSION['id'] . "/archlive/airootfs/etc/resolv.conf";
+// 		file_put_contents($file, $contents, FILE_APPEND);
+// 	}
+// }
+
+function changeMOTD() {
+	// Append $_SESSION['motd'] to $id/archlive/airootfs/etc/motd
+	$contents = $_SESSION['motd'] . "\n";
+	$file = "./" . $_SESSION['id'] . "/archlive/airootfs/etc/motd";
+	file_put_contents($file, $contents, FILE_APPEND|LOCK_EX);
 }
