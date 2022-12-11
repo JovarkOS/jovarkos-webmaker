@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install Archlinux
-      run: curl -L https://github.com/zaoqi/github-actions-archlinux/raw/master/install.sh | sh
+      run: curl -L https://github.com/jovarkos/github-actions-archlinux/raw/master/install.sh | bash
     - name: Docker hello-world
       run: |
         sudo pacman --noconfirm -Syu docker
