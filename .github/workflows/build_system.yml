@@ -1,6 +1,12 @@
 name: ISO
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      zip_location:
+        required: true
+      sessionID:
+        required: true
 
 jobs:
   build:
