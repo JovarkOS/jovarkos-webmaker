@@ -1,4 +1,4 @@
-name: CI
+name: ISO
 
 on: [workflow_dispatch]
 
