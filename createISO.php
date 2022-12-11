@@ -12,7 +12,7 @@ $dest = __DIR__ . "$id/archlive";
 
 // Don't copy if directory already exists (i.e if user refreshes at the wrong time)
 if(is_dir($dest) === false) {
-	shell_exec("cp -r $src $dest");
+	shell_exec("cp -r $src $dest") or die("Failed to copy releng files to $dest");
 }
 
 // Append $id/packages.x86_64 to $id/archlive/packages.x86_64 (i.e. add user's packages)
